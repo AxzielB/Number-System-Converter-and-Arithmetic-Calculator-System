@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="color-scheme" content="dark" />
+<title>Number System Converter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="eyebrow">Digital Logic Utility</div>
+    <h1 class="title">Number System Converter</h1>
+    <p class="subtitle">Convert between binary, octal, decimal, and hexadecimal — live, per channel. Pick a base, type a value, and every representation updates as you go.</p>
+  </header>
+
+  <section class="control-strip">
+    <div class="stepper">
+      <label class="stepper-label" for="channel-count">Input channels</label>
+      <div class="stepper-control">
+        <button type="button" class="stepper-btn" id="count-dec" aria-label="Decrease number of inputs">–</button>
+        <input type="number" id="channel-count" class="stepper-input" min="3" max="24" value="3" aria-label="Number of inputs" />
+        <button type="button" class="stepper-btn" id="count-inc" aria-label="Increase number of inputs">+</button>
+      </div>
+    </div>
+    <p class="stepper-hint">Minimum 3. Each channel converts independently.</p>
+  </section>
+
+  <main id="channels"></main>
+
+  <footer class="page-footer">
+    Accepts non-negative whole numbers only. Hex digits <strong>A–F</strong> work in either case. Values are computed with arbitrary precision, so very large numbers stay exact.
+  </footer>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
