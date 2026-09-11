@@ -3,21 +3,23 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="color-scheme" content="dark" />
+<meta name="color-scheme" content="light" />
 <title>Number System Converter</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Fredoka:wght@300;400;500;600&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
 <div class="page">
 
   <header class="masthead">
-    <div class="eyebrow">Digital Logic Utility</div>
+    <div class="masthead-deco" aria-hidden="true">
+      <span class="deco-shape deco-square"></span>
+      <span class="deco-shape deco-circle"></span>
+    </div>
+    <span class="masthead-badge"><span class="badge-dot"></span>Digital logic utility</span>
     <h1 class="title">Number System Converter</h1>
-    <p class="subtitle">Convert between binary, octal, decimal, and hexadecimal — live, per channel. Pick a base, type a value, and every representation updates as you go.</p>
+    <p class="subtitle">Convert between binary, octal, decimal, and hexadecimal — live, per input — then combine them all with one operator.</p>
   </header>
 
   <section class="control-strip">
@@ -29,18 +31,46 @@
         <button type="button" class="stepper-btn" id="count-inc" aria-label="Increase number of inputs">+</button>
       </div>
     </div>
-    <p class="stepper-hint">Minimum 3. Each channel converts independently.</p>
+    <p class="stepper-hint">Minimum 3 inputs — one operator applies across all of them.</p>
   </section>
 
   <main id="channels"></main>
+
+  <section class="op-panel" id="op-panel">
+    <div class="op-head">
+      <div class="op-title-group">
+        <span class="op-badge"><span class="badge-dot"></span>Combined result</span>
+        <h2 class="op-title">Full expression</h2>
+      </div>
+      <div class="op-operator-select">
+        <span class="op-operator-label">Apply Operator</span>
+        <div class="op-toggle-mini" id="global-op-toggle" role="radiogroup" aria-label="Operator applied between every input">
+          <button type="button" class="op-btn-mini" data-op="add" aria-label="Addition">+</button>
+          <button type="button" class="op-btn-mini" data-op="sub" aria-label="Subtraction">−</button>
+          <button type="button" class="op-btn-mini" data-op="mul" aria-label="Multiplication">×</button>
+          <button type="button" class="op-btn-mini" data-op="div" aria-label="Division">÷</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="op-screen">
+      <div class="op-expression" id="op-expression" aria-live="polite">—</div>
+      <p class="op-error" id="op-error" aria-live="polite"></p>
+    </div>
+
+    <div class="readout-grid op-result-grid" id="op-result">
+      <div class="readout-tile is-empty" data-base="2" aria-label="Binary value"><span class="readout-label">2</span><span class="readout-value">—</span></div>
+      <div class="readout-tile is-empty" data-base="8" aria-label="Octal value"><span class="readout-label">8</span><span class="readout-value">—</span></div>
+      <div class="readout-tile is-empty" data-base="10" aria-label="Decimal value"><span class="readout-label">10</span><span class="readout-value">—</span></div>
+      <div class="readout-tile is-empty" data-base="16" aria-label="Hexadecimal value"><span class="readout-label">16</span><span class="readout-value">—</span></div>
+    </div>
+  </section>
 
   <footer class="page-footer">
     Accepts non-negative whole numbers only. Hex digits <strong>A–F</strong> work in either case. Values are computed with arbitrary precision, so very large numbers stay exact.
   </footer>
 
 </div>
-
 <script src="script.js"></script>
-
 </body>
 </html>
