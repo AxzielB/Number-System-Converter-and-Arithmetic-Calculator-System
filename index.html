@@ -19,7 +19,7 @@
     </div>
     <span class="masthead-badge"><span class="badge-dot"></span>Digital logic utility</span>
     <h1 class="title">Number System Converter</h1>
-    <p class="subtitle">Convert between binary, octal, decimal, and hexadecimal — live, per input — then combine them all with one operator.</p>
+    <p class="subtitle">Convert between binary, octal, decimal, and hexadecimal — live, per input — then evaluate expressions with multiple operators, parentheses, and exact precision.</p>
   </header>
 
   <section class="control-strip">
@@ -31,7 +31,7 @@
         <button type="button" class="stepper-btn" id="count-inc" aria-label="Increase number of inputs">+</button>
       </div>
     </div>
-    <p class="stepper-hint">Minimum 3 inputs — one operator applies across all of them.</p>
+    <p class="stepper-hint">Channels map to variables a, b, c... for use in custom expressions.</p>
   </section>
 
   <main id="channels"></main>
@@ -39,21 +39,46 @@
   <section class="op-panel" id="op-panel">
     <div class="op-head">
       <div class="op-title-group">
-        <span class="op-badge"><span class="badge-dot"></span>Combined result</span>
-        <h2 class="op-title">Full expression</h2>
+        <span class="op-badge"><span class="badge-dot"></span>Arithmetic Engine</span>
+        <h2 class="op-title">Expression Calculator</h2>
       </div>
-      <div class="op-operator-select">
-        <span class="op-operator-label">Apply Operator</span>
-        <div class="op-toggle-mini" id="global-op-toggle" role="radiogroup" aria-label="Operator applied between every input">
-          <button type="button" class="op-btn-mini" data-op="add" aria-label="Addition">+</button>
-          <button type="button" class="op-btn-mini" data-op="sub" aria-label="Subtraction">−</button>
-          <button type="button" class="op-btn-mini" data-op="mul" aria-label="Multiplication">×</button>
-          <button type="button" class="op-btn-mini" data-op="div" aria-label="Division">÷</button>
+      <div class="op-presets">
+        <span class="op-operator-label">Presets</span>
+        <div class="preset-pills" id="preset-pills">
+          <button type="button" class="preset-btn" data-preset="(a+b)*c" title="Evaluate (a+b)*c">(a+b)*c</button>
+          <button type="button" class="preset-btn" data-preset="a*b+c" title="Evaluate a*b+c">a*b+c</button>
+          <button type="button" class="preset-btn" data-preset="(a+b-c)*d" title="Evaluate (a+b-c)*d">(a+b-c)*d</button>
         </div>
+      </div>
+    </div>
+
+    <div class="expr-bar">
+      <div class="expr-input-wrap">
+        <label for="expr-input" class="expr-label">Formula</label>
+        <input type="text" id="expr-input" class="expr-input" value="(a+b)*c" placeholder="e.g. (a+b)*c" autocomplete="off" spellcheck="false" aria-label="Arithmetic expression" />
+        <button type="button" id="expr-clear" class="expr-clear-btn" aria-label="Clear expression" title="Clear expression">✕</button>
+      </div>
+    </div>
+
+    <div class="keypad-tray" aria-label="Expression keypad">
+      <div class="keypad-group" id="keypad-vars" role="toolbar" aria-label="Channel variables"></div>
+      <div class="keypad-divider"></div>
+      <div class="keypad-group keypad-ops" role="toolbar" aria-label="Operators and parentheses">
+        <button type="button" class="key-btn key-paren" data-insert="(" aria-label="Left parenthesis">(</button>
+        <button type="button" class="key-btn key-paren" data-insert=")" aria-label="Right parenthesis">)</button>
+        <button type="button" class="key-btn key-op" data-insert=" + " aria-label="Plus">+</button>
+        <button type="button" class="key-btn key-op" data-insert=" - " aria-label="Minus">−</button>
+        <button type="button" class="key-btn key-op" data-insert=" * " aria-label="Multiply">×</button>
+        <button type="button" class="key-btn key-op" data-insert=" / " aria-label="Divide">÷</button>
+        <button type="button" class="key-btn key-backspace" id="key-backspace" aria-label="Backspace" title="Backspace">⌫</button>
       </div>
     </div>
     
     <div class="op-screen">
+      <div class="op-screen-header">
+        <span class="op-screen-label">Evaluated Expression</span>
+        <span class="precedence-badge" title="Evaluation order: Parentheses () &gt; Multiplicative *,/ &gt; Additive +,-">Order: () &rarr; &times; &divide; &rarr; + &minus;</span>
+      </div>
       <div class="op-expression" id="op-expression" aria-live="polite">—</div>
       <p class="op-error" id="op-error" aria-live="polite"></p>
     </div>
