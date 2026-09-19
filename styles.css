@@ -73,8 +73,9 @@ input, button { font: inherit; color: inherit; }
 button { cursor: pointer; outline: none; }
 
 .page {
-  max-width: 960px;
+  max-width: 1220px;
   margin: 0 auto;
+  width: 100%;
 }
 
 /* ---------- Masthead ---------- */
@@ -568,6 +569,46 @@ button { cursor: pointer; outline: none; }
   gap: 4px;
 }
 
+/* Operands Breakdown Tray & Clean Focused Tiles */
+.comp-operands-tray {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.comp-operands-tray .comp-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  padding: 24px 18px;
+  gap: 12px;
+}
+
+.comp-operands-tray .comp-tile-head {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.comp-operands-tray .comp-badge-pill {
+  font-size: 12px;
+  font-weight: 800;
+  padding: 5px 14px;
+}
+
+.comp-operands-tray .comp-val-bin {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  margin: 0;
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
 .comp-subtile .sub-label {
   color: var(--text-muted);
   font-weight: 700;
@@ -897,18 +938,19 @@ button { cursor: pointer; outline: none; }
 .comp-answers-grid, .comp-solver-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 28px;
+  gap: 32px;
 }
 
 .comp-answer-col, .comp-solver-col {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .comp-answer-card, .comp-solver-card {
   background: var(--surface);
   border-radius: var(--radius-lg);
-  padding: 32px 28px;
+  padding: 36px 32px;
   box-shadow: var(--neu-out);
   display: flex;
   flex-direction: column;
@@ -1262,6 +1304,108 @@ button { cursor: pointer; outline: none; }
 
 .comp-step-result-grid .readout-value {
   font-size: 14px;
+}
+
+/* Operands Complement Breakdown Card */
+.comp-operands-breakdown {
+  width: 100%;
+}
+
+.comp-breakdown-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 36px 32px;
+  box-shadow: var(--neu-out);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.comp-method-badge.badge-operands {
+  background: var(--surface);
+  color: var(--accent-primary);
+  border: 1px solid rgba(118, 139, 255, 0.35);
+}
+
+.comp-operands-breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+}
+
+.comp-operand-breakdown-box {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: 24px 22px;
+  box-shadow: var(--neu-in);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.op-breakdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.op-orig-val {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.op-orig-val b {
+  color: var(--accent-primary);
+  font-size: 15px;
+}
+
+.comp-step-calc-box {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: 24px 22px;
+  box-shadow: var(--neu-in);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.step-math-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
+  font-family: var(--mono);
+  width: 100%;
+}
+
+.step-math-title {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.step-math-expr {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: 0.05em;
+  text-align: center;
+  padding: 6px 20px;
+  background: var(--surface);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--neu-out-sm);
+  display: inline-block;
+  margin: 2px auto 6px;
 }
 
 
@@ -1726,8 +1870,8 @@ button { cursor: pointer; outline: none; }
 .page-footer strong { color: var(--text-main); }
 
 /* ---------- Responsive ---------- */
-@media (max-width: 820px) {
-  .comp-answers-grid, .comp-solver-grid { grid-template-columns: 1fr; }
+@media (max-width: 900px) {
+  .comp-answers-grid, .comp-solver-grid, .comp-operands-breakdown-grid { grid-template-columns: 1fr; }
   .comp-operands-row { grid-template-columns: 1fr; gap: 16px; }
   .comp-tray-grid { grid-template-columns: 1fr; }
   .comp-op-minus { margin: 0 auto; }

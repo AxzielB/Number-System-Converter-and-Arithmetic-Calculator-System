@@ -79,6 +79,7 @@
   var autoWidthDisplay = document.getElementById("auto-width-display");
   var onesCompSteps = document.getElementById("ones-comp-steps");
   var twosCompSteps = document.getElementById("twos-comp-steps");
+  var compOperandsBreakdown = document.getElementById("comp-operands-breakdown");
   var mSyncPills = document.getElementById("m-sync-pills");
   var nSyncPills = document.getElementById("n-sync-pills");
   var compCalcBtn = document.getElementById("comp-calc-btn");
@@ -266,17 +267,61 @@
     if (mBin.length > width) mBin = mBin.slice(-width);
     if (nBin.length > width) nBin = nBin.slice(-width);
 
+    var mod = 1n << BigInt(width);
+
+    // 1's and 2's Complement of M
+    var onesM = "";
+    for (var i = 0; i < mBin.length; i++) {
+      onesM += (mBin[i] === "0" ? "1" : "0");
+    }
+    var onesMBigInt = stringToBigIntBase(onesM, 2);
+    var twosMBigInt = (onesMBigInt + 1n) % mod;
+    var twosM = twosMBigInt.toString(2).padStart(width, "0");
+
+    var mComplements = {
+      bin: mBin,
+      ones: {
+        binary: onesM,
+        hex: bigIntToBase(onesMBigInt, 16),
+        octal: bigIntToBase(onesMBigInt, 8),
+        dec: onesMBigInt.toString(10)
+      },
+      twos: {
+        binary: twosM,
+        hex: bigIntToBase(twosMBigInt, 16),
+        octal: bigIntToBase(twosMBigInt, 8),
+        unsignedDec: twosMBigInt.toString(10),
+        signedDec: mVal === 0n ? "0" : "-" + mVal.toString(10)
+      }
+    };
+
     // 1's Complement of N
     var onesN = "";
-    for (var i = 0; i < nBin.length; i++) {
-      onesN += (nBin[i] === "0" ? "1" : "0");
+    for (var j = 0; j < nBin.length; j++) {
+      onesN += (nBin[j] === "0" ? "1" : "0");
     }
 
     // 2's Complement of N = 1's comp + 1
     var onesNBigInt = stringToBigIntBase(onesN, 2);
-    var mod = 1n << BigInt(width);
     var twosNBigInt = (onesNBigInt + 1n) % mod;
     var twosN = twosNBigInt.toString(2).padStart(width, "0");
+
+    var nComplements = {
+      bin: nBin,
+      ones: {
+        binary: onesN,
+        hex: bigIntToBase(onesNBigInt, 16),
+        octal: bigIntToBase(onesNBigInt, 8),
+        dec: onesNBigInt.toString(10)
+      },
+      twos: {
+        binary: twosN,
+        hex: bigIntToBase(twosNBigInt, 16),
+        octal: bigIntToBase(twosNBigInt, 8),
+        unsignedDec: twosNBigInt.toString(10),
+        signedDec: nVal === 0n ? "0" : "-" + nVal.toString(10)
+      }
+    };
 
     // Perform Columnar Additions
     var addOnes = performColumnarAddition(mBin, onesN);
@@ -358,8 +403,12 @@
       nVal: nVal,
       mBin: mBin,
       nBin: nBin,
+      onesM: onesM,
+      twosM: twosM,
+      mComplements: mComplements,
       onesN: onesN,
       twosN: twosN,
+      nComplements: nComplements,
       addOnes: addOnes,
       addTwos: addTwos,
       onesResult: onesResult,
@@ -1256,6 +1305,69 @@
 
   // COMPLEMENT SUBTRACTION ENGINE SOLVER & CONTROLLER
 
+  // Render Operands Complements breakdown (Minuend M and Subtrahend N)
+  function renderOperandsBreakdownHtml(data, mBase, nBase) {
+    return (
+      '<div class="comp-breakdown-card">' +
+      '<div class="comp-card-head">' +
+      '<div class="ans-status-row">' +
+      '<span class="comp-method-badge badge-operands">Step 1: Complements of Operands</span>' +
+      '<span class="ans-precision-tag">' + data.width + '-bit word</span>' +
+      '</div>' +
+      '<h3 class="comp-card-title">1\'s & 2\'s Complements of Minuend (M) and Subtrahend (N)</h3>' +
+      '<p class="comp-card-desc">Computed at the working word length (' + data.width + '-bit) before performing complement subtraction.</p>' +
+      '</div>' +
+      '<div class="comp-operands-breakdown-grid">' +
+
+      // Minuend M Card
+      '<div class="comp-operand-breakdown-box">' +
+      '<div class="op-breakdown-header">' +
+      '<span class="comp-operand-tag">Minuend <b>M</b> (' + BASE_NAME[mBase] + ')</span>' +
+      '<span class="op-orig-val">M = <b>' + data.mBin + '</b><sub>2</sub> <span class="calc-dec">(' + data.mVal.toString(10) + '<sub>10</sub>)</span></span>' +
+      '</div>' +
+      '<div class="comp-tray-grid comp-operands-tray">' +
+      '<div class="comp-tile comp-tile-ones">' +
+      '<div class="comp-tile-head">' +
+      '<span class="comp-badge-pill badge-ones">1\'s Comp of M</span>' +
+      '</div>' +
+      '<div class="comp-val-bin">' + data.mComplements.ones.binary + '<sub class="base-sub">2</sub></div>' +
+      '</div>' +
+      '<div class="comp-tile comp-tile-twos">' +
+      '<div class="comp-tile-head">' +
+      '<span class="comp-badge-pill badge-twos">2\'s Comp of M</span>' +
+      '</div>' +
+      '<div class="comp-val-bin">' + data.mComplements.twos.binary + '<sub class="base-sub">2</sub></div>' +
+      '</div>' +
+      '</div>' +
+      '</div>' +
+
+      // Subtrahend N Card
+      '<div class="comp-operand-breakdown-box">' +
+      '<div class="op-breakdown-header">' +
+      '<span class="comp-operand-tag">Subtrahend <b>N</b> (' + BASE_NAME[nBase] + ')</span>' +
+      '<span class="op-orig-val">N = <b>' + data.nBin + '</b><sub>2</sub> <span class="calc-dec">(' + data.nVal.toString(10) + '<sub>10</sub>)</span></span>' +
+      '</div>' +
+      '<div class="comp-tray-grid comp-operands-tray">' +
+      '<div class="comp-tile comp-tile-ones">' +
+      '<div class="comp-tile-head">' +
+      '<span class="comp-badge-pill badge-ones">1\'s Comp of N</span>' +
+      '</div>' +
+      '<div class="comp-val-bin">' + data.nComplements.ones.binary + '<sub class="base-sub">2</sub></div>' +
+      '</div>' +
+      '<div class="comp-tile comp-tile-twos">' +
+      '<div class="comp-tile-head">' +
+      '<span class="comp-badge-pill badge-twos">2\'s Comp of N</span>' +
+      '</div>' +
+      '<div class="comp-val-bin">' + data.nComplements.twos.binary + '<sub class="base-sub">2</sub></div>' +
+      '</div>' +
+      '</div>' +
+      '</div>' +
+
+      '</div>' +
+      '</div>'
+    );
+  }
+
   function renderComplementAnswerHtml(method, data) {
     var isMethodOnes = method === "ones";
     var compResult = isMethodOnes ? data.onesResult : data.twosResult;
@@ -1282,12 +1394,31 @@
       }
     }
 
+    var stepTitle = isMethodOnes ? "Step 2: Add M + (1's Comp of N)" : "Step 2: Add M + (2's Comp of N)";
+    var stepFormula = isMethodOnes
+      ? data.mBin + '<sub>2</sub> + ' + data.onesN + '<sub>2</sub>'
+      : data.mBin + '<sub>2</sub> + ' + data.twosN + '<sub>2</sub>';
+    var compOperandBin = isMethodOnes ? data.onesN : data.twosN;
+    var opLabel = isMethodOnes ? "1's Comp N" : "2's Comp N";
+    var addData = isMethodOnes ? data.addOnes : data.addTwos;
+
     return (
       '<div class="comp-answer-content">' +
       '<div class="ans-status-row">' +
       statusBadge +
       '<span class="ans-precision-tag">' + data.width + '-bit word</span>' +
       '</div>' +
+
+      // Addition math display
+      '<div class="comp-step-calc-box">' +
+      '<div class="step-math-intro">' +
+      '<span class="step-math-title">' + stepTitle + '</span>' +
+      '<div class="step-math-expr">' + stepFormula + '</div>' +
+      '</div>' +
+      renderColumnarMathHtml(data.mBin, compOperandBin, addData, data.width, opLabel) +
+      '</div>' +
+
+      // Binary difference primary readout
       '<div class="ans-primary-box">' +
       '<div class="ans-primary-label">Binary Difference</div>' +
       '<div class="ans-primary-val ' + (compResult.isPositive ? 'is-pos' : 'is-neg') + '">' +
@@ -1295,6 +1426,8 @@
       '</div>' +
       '<div class="ans-summary-text">' + summaryRule + '</div>' +
       '</div>' +
+
+      // Answer in all number systems
       '<div class="ans-grid-title">Answer in All Number Systems</div>' +
       renderResultTilesHtml(compResult.finalVal, compResult.isPositive) +
       '</div>'
@@ -1345,6 +1478,7 @@
     }
 
     if (mHasErr || nHasErr) {
+      if (compOperandsBreakdown) compOperandsBreakdown.innerHTML = "";
       onesCompSteps.innerHTML = '<div class="comp-empty-msg">Enter valid values for Minuend M and Subtrahend N, then click "Calculate Subtraction".</div>';
       twosCompSteps.innerHTML = '<div class="comp-empty-msg">Enter valid values for Minuend M and Subtrahend N, then click "Calculate Subtraction".</div>';
       return;
@@ -1357,6 +1491,10 @@
 
     if (autoWidthDisplay) {
       autoWidthDisplay.textContent = String(solverData.width);
+    }
+
+    if (compOperandsBreakdown) {
+      compOperandsBreakdown.innerHTML = renderOperandsBreakdownHtml(solverData, compState.mBase, compState.nBase);
     }
 
     onesCompSteps.innerHTML = renderComplementAnswerHtml("ones", solverData);
