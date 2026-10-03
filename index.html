@@ -23,221 +23,350 @@
         <span class="deco-shape deco-circle"></span>
       </div>
       <span class="masthead-badge"><span class="badge-dot"></span>Digital logic utility</span>
-      <h1 class="title">Number System Converter</h1>
-      <p class="subtitle">Convert between binary, octal, decimal, and hexadecimal live per channel — compute 1's & 2's
-        complements for all number systems, perform step-by-step complement subtraction, and evaluate exact arithmetic
-        formulas.</p>
+      <h1 class="title" id="page-main-title">Number System Converter &amp; Arithmetic Operations</h1>
+      <p class="subtitle" id="page-main-desc">Convert between binary, octal, decimal, and hexadecimal live per channel,
+        compute 1's and 2's complements, and evaluate exact multi-base arithmetic formulas.</p>
     </header>
 
-    <section class="control-strip">
-      <div class="stepper">
-        <label class="stepper-label" for="channel-count">Input channels</label>
-        <div class="stepper-control">
-          <button type="button" class="stepper-btn" id="count-dec" aria-label="Decrease number of inputs">–</button>
-          <input type="number" id="channel-count" class="stepper-input" min="3" max="24" value="3"
-            aria-label="Number of inputs" />
-          <button type="button" class="stepper-btn" id="count-inc" aria-label="Increase number of inputs">+</button>
-        </div>
+    <!-- Main Navigation Tabs -->
+    <nav class="tabs-nav-wrap" aria-label="Main functionality tabs">
+      <div class="tabs-nav" role="tablist" aria-label="Tool sections">
+        <button type="button" class="tab-btn is-active" id="tab-btn-converter" role="tab" aria-selected="true"
+          aria-controls="panel-converter" tabindex="0" title="Number System Converter &amp; Arithmetic Operations">
+          <span class="tab-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+              <line x1="8" y1="6" x2="16" y2="6"></line>
+              <line x1="16" y1="14" x2="16" y2="18"></line>
+              <path d="M16 10h.01"></path>
+              <path d="M12 10h.01"></path>
+              <path d="M8 10h.01"></path>
+              <path d="M12 14h.01"></path>
+              <path d="M8 14h.01"></path>
+              <path d="M12 18h.01"></path>
+              <path d="M8 18h.01"></path>
+            </svg>
+          </span>
+          <span class="tab-title">Number System Converter &amp; Arithmetic Operations</span>
+        </button>
+
+        <button type="button" class="tab-btn" id="tab-btn-complement" role="tab" aria-selected="false"
+          aria-controls="panel-complement" tabindex="-1" title="1's &amp; 2's Complement Subtraction">
+          <span class="tab-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"></circle>
+              <line x1="8" y1="12" x2="16" y2="12"></line>
+            </svg>
+          </span>
+          <span class="tab-title">1's &amp; 2's Complement Subtraction</span>
+        </button>
+
+        <button type="button" class="tab-btn" id="tab-btn-bcd" role="tab" aria-selected="false"
+          aria-controls="panel-bcd" tabindex="-1" title="BCD Arithmetic">
+          <span class="tab-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+              <path d="M7 8h2"></path>
+              <path d="M7 12h3"></path>
+              <path d="M14 8h3"></path>
+              <path d="M15 12h2"></path>
+            </svg>
+          </span>
+          <span class="tab-title">BCD Arithmetic</span>
+        </button>
       </div>
-      <p class="stepper-hint">Channels map to variables a, b, c... for use in custom expressions.</p>
-    </section>
+    </nav>
 
-    <main id="channels"></main>
-
-    <!-- 1's & 2's Complement Subtraction Engine -->
-    <section class="complement-panel" id="complement-panel">
-      <div class="complement-head">
-        <div class="complement-title-group">
-          <span class="complement-badge"><span class="badge-dot"></span>Digital Logic Engine</span>
-          <h2 class="complement-title">1's & 2's Complement Subtraction</h2>
+    <!-- Tab 1: Number System Converter & Arithmetic Operations -->
+    <div class="tab-panel is-active" id="panel-converter" role="tabpanel" aria-labelledby="tab-btn-converter">
+      <section class="control-strip">
+        <div class="stepper">
+          <label class="stepper-label" for="channel-count">Input channels</label>
+          <div class="stepper-control">
+            <button type="button" class="stepper-btn" id="count-dec" aria-label="Decrease number of inputs">–</button>
+            <input type="number" id="channel-count" class="stepper-input" min="3" max="24" value="3"
+              aria-label="Number of inputs" />
+            <button type="button" class="stepper-btn" id="count-inc" aria-label="Increase number of inputs">+</button>
+          </div>
         </div>
-      </div>
+        <p class="stepper-hint">Channels map to variables a, b, c... for use in custom expressions.</p>
+      </section>
 
-      <!-- Operands & Precision Control Strip -->
-      <div class="comp-controls-card">
-        <div class="comp-operands-row">
-          <!-- Minuend M -->
-          <div class="comp-operand-box" id="operand-m-box">
-            <div class="comp-operand-header">
-              <span class="comp-operand-tag">Minuend <b>M</b></span>
-              <div class="base-toggle comp-base-toggle" id="m-base-toggle" role="radiogroup"
-                aria-label="Base for Minuend M">
-                <button type="button" class="base-btn is-active" data-base="2">2</button>
-                <button type="button" class="base-btn" data-base="8">8</button>
-                <button type="button" class="base-btn" data-base="10">10</button>
-                <button type="button" class="base-btn" data-base="16">16</button>
+      <main id="channels"></main>
+
+      <section class="op-panel" id="op-panel">
+        <div class="op-head">
+          <div class="op-title-group">
+            <span class="op-badge"><span class="badge-dot"></span>Arithmetic Engine</span>
+            <h2 class="op-title">Expression Calculator</h2>
+          </div>
+          <div class="op-presets">
+            <span class="op-operator-label">Presets</span>
+            <div class="preset-pills" id="preset-pills">
+              <button type="button" class="preset-btn" data-preset="(a+b)*c" title="Evaluate (a+b)*c">(a+b)*c</button>
+              <button type="button" class="preset-btn" data-preset="a*b+c" title="Evaluate a*b+c">a*b+c</button>
+              <button type="button" class="preset-btn" data-preset="(a+b-c)*d"
+                title="Evaluate (a+b-c)*d">(a+b-c)*d</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="expr-bar">
+          <div class="expr-input-wrap">
+            <label for="expr-input" class="expr-label">Formula</label>
+            <input type="text" id="expr-input" class="expr-input" value="(a+b)*c" placeholder="e.g. (a+b)*c"
+              autocomplete="off" spellcheck="false" aria-label="Arithmetic expression" />
+            <button type="button" id="expr-clear" class="expr-clear-btn" aria-label="Clear expression"
+              title="Clear expression">✕</button>
+          </div>
+        </div>
+
+        <div class="keypad-tray" aria-label="Expression keypad">
+          <div class="keypad-group" id="keypad-vars" role="toolbar" aria-label="Channel variables"></div>
+          <div class="keypad-divider"></div>
+          <div class="keypad-group keypad-ops" role="toolbar" aria-label="Operators and parentheses">
+            <button type="button" class="key-btn key-paren" data-insert="(" aria-label="Left parenthesis">(</button>
+            <button type="button" class="key-btn key-paren" data-insert=")" aria-label="Right parenthesis">)</button>
+            <button type="button" class="key-btn key-op" data-insert=" + " aria-label="Plus">+</button>
+            <button type="button" class="key-btn key-op" data-insert=" - " aria-label="Minus">−</button>
+            <button type="button" class="key-btn key-op" data-insert=" * " aria-label="Multiply">×</button>
+            <button type="button" class="key-btn key-op" data-insert=" / " aria-label="Divide">÷</button>
+            <button type="button" class="key-btn key-backspace" id="key-backspace" aria-label="Backspace"
+              title="Backspace">⌫</button>
+          </div>
+        </div>
+
+        <div class="op-screen">
+          <div class="op-screen-header">
+            <span class="op-screen-label">Evaluated Expression</span>
+            <span class="precedence-badge"
+              title="Evaluation order: Parentheses () &gt; Multiplicative *,/ &gt; Additive +,-">Order: () &rarr;
+              &times;
+              &divide; &rarr; + &minus;</span>
+          </div>
+          <div class="op-expression" id="op-expression" aria-live="polite">—</div>
+          <p class="op-error" id="op-error" aria-live="polite"></p>
+        </div>
+
+        <div class="readout-grid op-result-grid" id="op-result">
+          <div class="readout-tile is-empty" data-base="2" aria-label="Binary value"><span
+              class="readout-label">2</span><span class="readout-value">—</span></div>
+          <div class="readout-tile is-empty" data-base="8" aria-label="Octal value"><span
+              class="readout-label">8</span><span class="readout-value">—</span></div>
+          <div class="readout-tile is-empty" data-base="10" aria-label="Decimal value"><span
+              class="readout-label">10</span><span class="readout-value">—</span></div>
+          <div class="readout-tile is-empty" data-base="16" aria-label="Hexadecimal value"><span
+              class="readout-label">16</span><span class="readout-value">—</span></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Tab 2: 1's and 2's Complement Subtraction -->
+    <div class="tab-panel" id="panel-complement" role="tabpanel" aria-labelledby="tab-btn-complement" hidden>
+      <!-- 1's & 2's Complement Subtraction Engine -->
+      <section class="complement-panel" id="complement-panel">
+        <div class="complement-head">
+          <div class="complement-title-group">
+            <span class="complement-badge"><span class="badge-dot"></span>Digital Logic Engine</span>
+            <h2 class="complement-title">1's & 2's Complement Subtraction</h2>
+          </div>
+        </div>
+
+        <!-- Operands & Precision Control Strip -->
+        <div class="comp-controls-card">
+          <div class="comp-operands-row">
+            <!-- Minuend M -->
+            <div class="comp-operand-box" id="operand-m-box">
+              <div class="comp-operand-header">
+                <span class="comp-operand-tag">Minuend <b>M</b></span>
+                <div class="base-toggle comp-base-toggle" id="m-base-toggle" role="radiogroup"
+                  aria-label="Base for Minuend M">
+                  <button type="button" class="base-btn is-active" data-base="2">2</button>
+                  <button type="button" class="base-btn" data-base="8">8</button>
+                  <button type="button" class="base-btn" data-base="10">10</button>
+                  <button type="button" class="base-btn" data-base="16">16</button>
+                </div>
+              </div>
+              <div class="comp-input-wrap">
+                <input type="text" id="comp-m-input" class="value-input comp-val-input" value="10101"
+                  placeholder="e.g. 10101" autocomplete="off" spellcheck="false" aria-label="Minuend M value" />
+                <span class="input-error comp-input-error" id="comp-m-error" aria-live="polite"></span>
+              </div>
+              <div class="comp-channel-sync" id="m-channel-sync">
+                <span class="comp-sync-label">From channel:</span>
+                <div class="comp-sync-pills" id="m-sync-pills"></div>
               </div>
             </div>
-            <div class="comp-input-wrap">
-              <input type="text" id="comp-m-input" class="value-input comp-val-input" value="10101"
-                placeholder="e.g. 10101" autocomplete="off" spellcheck="false" aria-label="Minuend M value" />
-              <span class="input-error comp-input-error" id="comp-m-error" aria-live="polite"></span>
-            </div>
-            <div class="comp-channel-sync" id="m-channel-sync">
-              <span class="comp-sync-label">From channel:</span>
-              <div class="comp-sync-pills" id="m-sync-pills"></div>
-            </div>
-          </div>
 
-          <!-- Minus Operator Symbol -->
-          <div class="comp-operator-wrap" aria-hidden="true">
-            <span class="comp-op-minus">−</span>
-          </div>
+            <!-- Minus Operator Symbol -->
+            <div class="comp-operator-wrap" aria-hidden="true">
+              <span class="comp-op-minus">−</span>
+            </div>
 
-          <!-- Subtrahend N -->
-          <div class="comp-operand-box" id="operand-n-box">
-            <div class="comp-operand-header">
-              <span class="comp-operand-tag">Subtrahend <b>N</b></span>
-              <div class="base-toggle comp-base-toggle" id="n-base-toggle" role="radiogroup"
-                aria-label="Base for Subtrahend N">
-                <button type="button" class="base-btn is-active" data-base="2">2</button>
-                <button type="button" class="base-btn" data-base="8">8</button>
-                <button type="button" class="base-btn" data-base="10">10</button>
-                <button type="button" class="base-btn" data-base="16">16</button>
+            <!-- Subtrahend N -->
+            <div class="comp-operand-box" id="operand-n-box">
+              <div class="comp-operand-header">
+                <span class="comp-operand-tag">Subtrahend <b>N</b></span>
+                <div class="base-toggle comp-base-toggle" id="n-base-toggle" role="radiogroup"
+                  aria-label="Base for Subtrahend N">
+                  <button type="button" class="base-btn is-active" data-base="2">2</button>
+                  <button type="button" class="base-btn" data-base="8">8</button>
+                  <button type="button" class="base-btn" data-base="10">10</button>
+                  <button type="button" class="base-btn" data-base="16">16</button>
+                </div>
+              </div>
+              <div class="comp-input-wrap">
+                <input type="text" id="comp-n-input" class="value-input comp-val-input" value="01100"
+                  placeholder="e.g. 01100" autocomplete="off" spellcheck="false" aria-label="Subtrahend N value" />
+                <span class="input-error comp-input-error" id="comp-n-error" aria-live="polite"></span>
+              </div>
+              <div class="comp-channel-sync" id="n-channel-sync">
+                <span class="comp-sync-label">From channel:</span>
+                <div class="comp-sync-pills" id="n-sync-pills"></div>
               </div>
             </div>
-            <div class="comp-input-wrap">
-              <input type="text" id="comp-n-input" class="value-input comp-val-input" value="01100"
-                placeholder="e.g. 01100" autocomplete="off" spellcheck="false" aria-label="Subtrahend N value" />
-              <span class="input-error comp-input-error" id="comp-n-error" aria-live="polite"></span>
+          </div>
+
+          <!-- Precision / Bit-Width Configuration -->
+          <div class="comp-bitwidth-bar">
+            <div class="comp-bitwidth-label-group">
+              <span class="comp-bitwidth-title">Working Word Length:</span>
             </div>
-            <div class="comp-channel-sync" id="n-channel-sync">
-              <span class="comp-sync-label">From channel:</span>
-              <div class="comp-sync-pills" id="n-sync-pills"></div>
+            <div class="comp-bitwidth-selector" id="comp-bitwidth-selector" role="radiogroup"
+              aria-label="Bit width selection">
+              <button type="button" class="bitwidth-btn is-active" data-width="auto">Auto (<span
+                  id="auto-width-display">5</span>-bit)</button>
+              <button type="button" class="bitwidth-btn" data-width="8">8-bit</button>
+              <button type="button" class="bitwidth-btn" data-width="16">16-bit</button>
+              <button type="button" class="bitwidth-btn" data-width="32">32-bit</button>
             </div>
+          </div>
+
+          <!-- Action Row with Calculate Button -->
+          <div class="comp-action-bar">
+            <button type="button" id="comp-calc-btn" class="comp-calc-btn"
+              aria-label="Calculate complement subtraction">
+              <span>Calculate Subtraction</span>
+            </button>
           </div>
         </div>
 
-        <!-- Precision / Bit-Width Configuration -->
-        <div class="comp-bitwidth-bar">
-          <div class="comp-bitwidth-label-group">
-            <span class="comp-bitwidth-title">Working Word Length:</span>
-          </div>
-          <div class="comp-bitwidth-selector" id="comp-bitwidth-selector" role="radiogroup"
-            aria-label="Bit width selection">
-            <button type="button" class="bitwidth-btn is-active" data-width="auto">Auto (<span
-                id="auto-width-display">5</span>-bit)</button>
-            <button type="button" class="bitwidth-btn" data-width="8">8-bit</button>
-            <button type="button" class="bitwidth-btn" data-width="16">16-bit</button>
-            <button type="button" class="bitwidth-btn" data-width="32">32-bit</button>
-          </div>
-        </div>
+        <!-- Operands Complements Breakdown (Displayed before Subtraction Result) -->
+        <div class="comp-operands-breakdown" id="comp-operands-breakdown"></div>
 
-        <!-- Action Row with Calculate Button -->
-        <div class="comp-action-bar">
-          <button type="button" id="comp-calc-btn" class="comp-calc-btn" aria-label="Calculate complement subtraction">
-            <span>Calculate Subtraction</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Operands Complements Breakdown (Displayed before Subtraction Result) -->
-      <div class="comp-operands-breakdown" id="comp-operands-breakdown"></div>
-
-      <!-- Direct Answers Container -->
-      <div class="comp-answers-grid" id="comp-answers-grid">
-        <!-- Method 1: 1's Complement Subtraction Column -->
-        <div class="comp-answer-col" id="col-ones-comp">
-          <div class="comp-answer-card">
-            <div class="comp-card-head">
-              <span class="comp-method-badge badge-ones">1's Complement Subtraction</span>
-              <h3 class="comp-card-title">1's Complement Result</h3>
-              <p class="comp-card-desc">End-around carry addition (Carry = 1) or sum inversion (Carry = 0).</p>
+        <!-- Direct Answers Container -->
+        <div class="comp-answers-grid" id="comp-answers-grid">
+          <!-- Method 1: 1's Complement Subtraction Column -->
+          <div class="comp-answer-col" id="col-ones-comp">
+            <div class="comp-answer-card">
+              <div class="comp-card-head">
+                <span class="comp-method-badge badge-ones">1's Complement Subtraction</span>
+                <h3 class="comp-card-title">1's Complement Result</h3>
+                <p class="comp-card-desc">End-around carry addition (Carry = 1) or sum inversion (Carry = 0).</p>
+              </div>
+              <div class="comp-answer-body" id="ones-comp-steps">
+                <!-- Injected dynamically -->
+              </div>
             </div>
-            <div class="comp-answer-body" id="ones-comp-steps">
-              <!-- Injected dynamically -->
+          </div>
+
+          <!-- Method 2: 2's Complement Subtraction Column -->
+          <div class="comp-answer-col" id="col-twos-comp">
+            <div class="comp-answer-card">
+              <div class="comp-card-head">
+                <span class="comp-method-badge badge-twos">2's Complement Subtraction</span>
+                <h3 class="comp-card-title">2's Complement Result</h3>
+                <p class="comp-card-desc">End carry discard (Carry = 1) or 2's complement of sum (Carry = 0).</p>
+              </div>
+              <div class="comp-answer-body" id="twos-comp-steps">
+                <!-- Injected dynamically -->
+              </div>
             </div>
           </div>
         </div>
+      </section>
+    </div>
 
-        <!-- Method 2: 2's Complement Subtraction Column -->
-        <div class="comp-answer-col" id="col-twos-comp">
-          <div class="comp-answer-card">
-            <div class="comp-card-head">
-              <span class="comp-method-badge badge-twos">2's Complement Subtraction</span>
-              <h3 class="comp-card-title">2's Complement Result</h3>
-              <p class="comp-card-desc">End carry discard (Carry = 1) or 2's complement of sum (Carry = 0).</p>
+    <!-- Tab 3: BCD Arithmetic -->
+    <div class="tab-panel" id="panel-bcd" role="tabpanel" aria-labelledby="tab-btn-bcd" hidden>
+      <div class="bcd-page-head">
+        <span class="bcd-badge"><span class="badge-dot"></span>Digital Logic BCD Engine</span>
+        <h2 class="bcd-page-title">Binary-Coded Decimal (BCD) Arithmetic</h2>
+        <p class="bcd-page-subtitle">Perform BCD addition with automatic +0110₂ (+6) correction, and BCD subtraction
+          using 9's and 10's complement methods.</p>
+      </div>
+
+      <div class="bcd-boxes-stack" id="bcd-boxes-stack">
+        <!-- Input Section -->
+        <div class="bcd-box" id="bcd-input-box">
+          <div class="bcd-box-head">
+            <span class="bcd-box-badge bcd-badge-input">Input</span>
+            <h3 class="bcd-box-title">Input Numbers</h3>
+            <p class="bcd-box-desc">Enter two decimal numbers. All BCD conversions, addition, and complement
+              subtractions below will compute simultaneously.</p>
+          </div>
+          <div class="bcd-inputs-row">
+            <!-- Operand A -->
+            <div class="bcd-operand-box" id="bcd-operand-a-box">
+              <div class="bcd-operand-header">
+                <span class="bcd-operand-tag">Number <b>A</b> (Augend / Minuend)</span>
+                <span class="bcd-base-tag">Decimal</span>
+              </div>
+              <div class="bcd-input-wrap">
+                <input type="text" id="bcd-a-input" class="value-input bcd-val-input" value="" placeholder="e.g. 58"
+                  autocomplete="off" spellcheck="false" aria-label="Decimal Number A" />
+                <span class="input-error bcd-input-error" id="bcd-a-error" aria-live="polite"></span>
+              </div>
             </div>
-            <div class="comp-answer-body" id="twos-comp-steps">
-              <!-- Injected dynamically -->
+
+            <!-- Operator indicator -->
+            <div class="bcd-op-separator" aria-hidden="true">
+              <span class="bcd-op-icon">&amp;</span>
+            </div>
+
+            <!-- Operand B -->
+            <div class="bcd-operand-box" id="bcd-operand-b-box">
+              <div class="bcd-operand-header">
+                <span class="bcd-operand-tag">Number <b>B</b> (Addend / Subtrahend)</span>
+                <span class="bcd-base-tag">Decimal</span>
+              </div>
+              <div class="bcd-input-wrap">
+                <input type="text" id="bcd-b-input" class="value-input bcd-val-input" value="" placeholder="e.g. 75"
+                  autocomplete="off" spellcheck="false" aria-label="Decimal Number B" />
+                <span class="input-error bcd-input-error" id="bcd-b-error" aria-live="polite"></span>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
 
-    <section class="op-panel" id="op-panel">
-      <div class="op-head">
-        <div class="op-title-group">
-          <span class="op-badge"><span class="badge-dot"></span>Arithmetic Engine</span>
-          <h2 class="op-title">Expression Calculator</h2>
-        </div>
-        <div class="op-presets">
-          <span class="op-operator-label">Presets</span>
-          <div class="preset-pills" id="preset-pills">
-            <button type="button" class="preset-btn" data-preset="(a+b)*c" title="Evaluate (a+b)*c">(a+b)*c</button>
-            <button type="button" class="preset-btn" data-preset="a*b+c" title="Evaluate a*b+c">a*b+c</button>
-            <button type="button" class="preset-btn" data-preset="(a+b-c)*d"
-              title="Evaluate (a+b-c)*d">(a+b-c)*d</button>
+          <!-- Action Button -->
+          <div class="bcd-action-bar">
+            <button type="button" id="bcd-calc-btn" class="comp-calc-btn bcd-calc-btn"
+              aria-label="Calculate BCD operations">
+              <span>Calculate BCD Operations</span>
+            </button>
           </div>
         </div>
+
+        <!-- Box 2 — Decimal to BCD Conversion -->
+        <div class="bcd-box" id="bcd-conversion-box"></div>
+
+        <!-- Box 3 — BCD Addition -->
+        <div class="bcd-box" id="bcd-addition-box"></div>
+
+        <!-- Box 4 — BCD Subtraction -->
+        <div class="bcd-box" id="bcd-subtraction-box"></div>
       </div>
-
-      <div class="expr-bar">
-        <div class="expr-input-wrap">
-          <label for="expr-input" class="expr-label">Formula</label>
-          <input type="text" id="expr-input" class="expr-input" value="(a+b)*c" placeholder="e.g. (a+b)*c"
-            autocomplete="off" spellcheck="false" aria-label="Arithmetic expression" />
-          <button type="button" id="expr-clear" class="expr-clear-btn" aria-label="Clear expression"
-            title="Clear expression">✕</button>
-        </div>
-      </div>
-
-      <div class="keypad-tray" aria-label="Expression keypad">
-        <div class="keypad-group" id="keypad-vars" role="toolbar" aria-label="Channel variables"></div>
-        <div class="keypad-divider"></div>
-        <div class="keypad-group keypad-ops" role="toolbar" aria-label="Operators and parentheses">
-          <button type="button" class="key-btn key-paren" data-insert="(" aria-label="Left parenthesis">(</button>
-          <button type="button" class="key-btn key-paren" data-insert=")" aria-label="Right parenthesis">)</button>
-          <button type="button" class="key-btn key-op" data-insert=" + " aria-label="Plus">+</button>
-          <button type="button" class="key-btn key-op" data-insert=" - " aria-label="Minus">−</button>
-          <button type="button" class="key-btn key-op" data-insert=" * " aria-label="Multiply">×</button>
-          <button type="button" class="key-btn key-op" data-insert=" / " aria-label="Divide">÷</button>
-          <button type="button" class="key-btn key-backspace" id="key-backspace" aria-label="Backspace"
-            title="Backspace">⌫</button>
-        </div>
-      </div>
-
-      <div class="op-screen">
-        <div class="op-screen-header">
-          <span class="op-screen-label">Evaluated Expression</span>
-          <span class="precedence-badge"
-            title="Evaluation order: Parentheses () &gt; Multiplicative *,/ &gt; Additive +,-">Order: () &rarr; &times;
-            &divide; &rarr; + &minus;</span>
-        </div>
-        <div class="op-expression" id="op-expression" aria-live="polite">—</div>
-        <p class="op-error" id="op-error" aria-live="polite"></p>
-      </div>
-
-      <div class="readout-grid op-result-grid" id="op-result">
-        <div class="readout-tile is-empty" data-base="2" aria-label="Binary value"><span
-            class="readout-label">2</span><span class="readout-value">—</span></div>
-        <div class="readout-tile is-empty" data-base="8" aria-label="Octal value"><span
-            class="readout-label">8</span><span class="readout-value">—</span></div>
-        <div class="readout-tile is-empty" data-base="10" aria-label="Decimal value"><span
-            class="readout-label">10</span><span class="readout-value">—</span></div>
-        <div class="readout-tile is-empty" data-base="16" aria-label="Hexadecimal value"><span
-            class="readout-label">16</span><span class="readout-value">—</span></div>
-      </div>
-    </section>
-
-    <footer class="page-footer">
-      Accepts non-negative whole numbers only. Hex digits <strong>A–F</strong> work in either case. Values are computed
-      with arbitrary precision, so very large numbers stay exact.
-    </footer>
-
+    </div>
   </div>
-  <script src="script.js"></script>
+  <script src="common.js"></script>
+  <script src="tab-converter.js"></script>
+  <script src="tab-complements.js"></script>
+  <script src="tab-bcd.js"></script>
 </body>
 
 </html>

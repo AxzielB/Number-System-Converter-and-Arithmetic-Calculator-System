@@ -129,6 +129,138 @@ button { cursor: pointer; outline: none; }
   font-weight: 500;
 }
 
+/* ---------- Main Navigation Tabs (Animated Expanding Icon Pills) ---------- */
+.tabs-nav-wrap {
+  margin-bottom: 36px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.tabs-nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--surface);
+  border-radius: 9999px;
+  padding: 6px 8px;
+  box-shadow: var(--neu-in);
+  max-width: 100%;
+}
+
+.tab-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 9999px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 48px;
+  overflow: hidden;
+}
+
+.tab-btn:hover:not(.is-active) {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+.tab-btn.is-active {
+  background: var(--surface);
+  color: var(--accent-primary);
+  box-shadow: var(--neu-out);
+  cursor: default;
+  padding: 6px 20px 6px 8px;
+}
+
+.tab-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: var(--neu-out-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--text-muted);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-btn:hover:not(.is-active) .tab-icon {
+  color: var(--accent-primary);
+  transform: scale(1.08);
+}
+
+.tab-btn.is-active .tab-icon {
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--oct) 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(118, 139, 255, 0.42);
+}
+
+/* Inactive tabs: title is hidden with zero width and opacity */
+.tab-title {
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--accent-primary);
+  line-height: 1.25;
+  white-space: nowrap;
+  max-width: 0;
+  opacity: 0;
+  transform: translateX(-10px);
+  margin-left: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: max-width 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+              margin-left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Active tab: title smoothly slides in and expands */
+.tab-btn.is-active .tab-title {
+  max-width: 440px;
+  opacity: 1;
+  transform: translateX(0);
+  margin-left: 10px;
+  pointer-events: auto;
+}
+
+/* Tab Panels */
+.tab-panel {
+  display: none;
+  animation: tabFadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.tab-panel.is-active {
+  display: block;
+}
+
+.tab-panel[hidden] {
+  display: none !important;
+}
+
+@keyframes tabFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ---------- Control strip ---------- */
 .control-strip {
   display: flex;
@@ -1858,6 +1990,698 @@ button { cursor: pointer; outline: none; }
 .op-result-grid .readout-tile.is-empty .readout-value { color: var(--text-muted); opacity: 0.6; }
 .op-result-grid .readout-tile.is-empty .readout-label { opacity: 0.3; background: var(--text-muted); box-shadow: none; }
 
+/* ---------- BCD Arithmetic (4 Independent Boxes) ---------- */
+.bcd-page-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 28px;
+}
+
+.bcd-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  border-radius: var(--radius-pill);
+  padding: 8px 16px;
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text-main);
+  box-shadow: var(--neu-out-sm);
+  margin-bottom: 14px;
+}
+
+.bcd-badge .badge-dot {
+  background: var(--hex);
+}
+
+.bcd-page-title {
+  font-family: var(--display);
+  font-size: 32px;
+  font-weight: 500;
+  margin: 0 0 8px;
+  color: var(--text-main);
+}
+
+.bcd-page-subtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+  max-width: 72ch;
+}
+
+/* 4 Independent Boxes Layout (No outer card container) */
+.bcd-boxes-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-bottom: 40px;
+}
+
+.bcd-box {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 36px 32px;
+  box-shadow: var(--neu-out);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.bcd-box-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(166, 180, 200, 0.35);
+}
+
+.bcd-box-badge {
+  align-self: flex-start;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  box-shadow: var(--neu-out-sm);
+  background: var(--surface);
+}
+
+.bcd-badge-input { color: var(--accent-primary); border: 1px solid rgba(118, 139, 255, 0.35); }
+.bcd-badge-rep { color: var(--hex); border: 1px solid rgba(82, 191, 166, 0.35); }
+.bcd-badge-add { color: var(--accent-primary); border: 1px solid rgba(118, 139, 255, 0.35); }
+.bcd-badge-sub { color: var(--oct); border: 1px solid rgba(143, 118, 255, 0.35); }
+.bcd-badge-sub9 { color: var(--oct); border: 1px solid rgba(143, 118, 255, 0.35); }
+.bcd-badge-sub10 { color: var(--dec); border: 1px solid rgba(92, 184, 217, 0.35); }
+
+.bcd-box-title {
+  font-family: var(--display);
+  font-size: 24px;
+  font-weight: 500;
+  margin: 4px 0 0;
+  color: var(--text-main);
+}
+
+.bcd-box-desc {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Box 1: Inputs */
+.bcd-inputs-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 20px;
+  align-items: center;
+}
+
+.bcd-operand-box {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: 22px;
+  box-shadow: var(--neu-in);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bcd-operand-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.bcd-operand-tag {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  box-shadow: var(--neu-out-sm);
+}
+
+#bcd-operand-a-box .bcd-operand-tag b {
+  color: var(--accent-primary);
+  font-size: 15px;
+}
+
+#bcd-operand-b-box .bcd-operand-tag b {
+  color: var(--oct);
+  font-size: 15px;
+}
+
+.bcd-base-tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--dec);
+  background: var(--surface);
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  box-shadow: var(--neu-out-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.bcd-input-wrap {
+  position: relative;
+}
+
+.bcd-val-input {
+  padding: 18px 20px;
+  font-size: 22px;
+}
+
+.bcd-input-error {
+  min-height: 18px;
+}
+
+.bcd-op-separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bcd-op-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: var(--neu-out-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--accent-primary);
+  line-height: 1;
+  user-select: none;
+}
+
+.bcd-action-bar {
+  display: flex;
+  justify-content: center;
+  padding-top: 6px;
+}
+
+/* Box 2: BCD Representation Grid */
+.bcd-rep-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.bcd-rep-box {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  box-shadow: var(--neu-in);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.bcd-rep-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.bcd-rep-digits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.bcd-nibble-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  box-shadow: var(--neu-out-sm);
+  gap: 4px;
+  min-width: 72px;
+}
+
+.bcd-nibble-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.bcd-nibble-dec {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--accent-primary);
+}
+
+.bcd-nibble-bin {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: 0.06em;
+}
+
+.bcd-full-string {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 700;
+  padding: 12px 18px;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--neu-out-sm);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Box 3 & 4: Multi-Digit BCD Columnar Addition & Math Stack */
+.bcd-multi-calc {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: 22px 28px;
+  box-shadow: var(--neu-in);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 16px;
+  font-weight: 700;
+  margin: 4px 0;
+  overflow-x: auto;
+}
+
+.bcd-stack-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  line-height: 1.8;
+  gap: 20px;
+}
+
+.bcd-stack-label {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-muted);
+  min-width: 135px;
+  text-align: left;
+}
+
+.bcd-stack-val {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-main);
+  text-align: right;
+  letter-spacing: 0.08em;
+  word-spacing: 0.25em;
+  white-space: nowrap;
+}
+
+.bcd-stack-divider {
+  height: 2px;
+  background: rgba(166, 180, 200, 0.65);
+  margin: 6px 0;
+  width: 100%;
+  border-radius: 2px;
+}
+
+.bcd-stack-row.bcd-row-raw .bcd-stack-val {
+  color: var(--text-muted);
+}
+
+.bcd-stack-row.bcd-row-corr .bcd-stack-val {
+  color: #D63333;
+}
+
+.bcd-corr-nibble.is-corr {
+  color: #D63333;
+  font-weight: 800;
+}
+
+.bcd-corr-nibble.no-corr {
+  opacity: 0.4;
+  color: var(--text-muted);
+}
+
+.bcd-stack-row.bcd-row-final .bcd-stack-val {
+  color: var(--accent-primary);
+  font-size: 18px;
+}
+
+.bcd-carry-msb {
+  color: var(--accent-primary);
+  font-weight: 800;
+  text-decoration: underline;
+}
+
+/* Explanatory notes list below multi-calc */
+.bcd-notes-list {
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  padding: 14px 20px;
+  box-shadow: var(--neu-in);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bcd-note-item {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.bcd-note-item b {
+  color: var(--text-main);
+}
+
+/* Subtraction Methods Grid */
+.bcd-sub-methods-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.bcd-sub-section {
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bcd-sub-section + .bcd-sub-section {
+  margin-top: 14px;
+  padding-top: 36px;
+  border-top: 1px dashed rgba(166, 180, 200, 0.45);
+}
+
+.bcd-sub-section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(166, 180, 200, 0.35);
+}
+
+.bcd-sub-section-title {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 500;
+  margin: 2px 0 0;
+  color: var(--text-main);
+}
+
+.bcd-sub-section-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Complement Subtraction Step Cards */
+.bcd-sub-step-card {
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  padding: 20px 22px;
+  box-shadow: var(--neu-in);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bcd-sub-step-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.bcd-sub-step-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.bcd-step-pill {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 800;
+  background: var(--surface);
+  color: var(--oct);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  box-shadow: var(--neu-out-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.bcd-sub-step-title {
+  font-family: var(--mono);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.bcd-sub-step-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Step 1 Compact Operands Row */
+.bcd-operands-compact {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  background: var(--surface);
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--neu-out-sm);
+}
+
+.bcd-op-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+.bcd-op-tag {
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.bcd-op-val {
+  color: var(--text-main);
+  font-weight: 700;
+}
+
+.bcd-op-val b {
+  color: var(--accent-primary);
+}
+
+/* Complement Addition Columnar Math Box */
+.bcd-comp-math-box {
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  padding: 18px 22px;
+  box-shadow: var(--neu-out-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 700;
+  overflow-x: auto;
+}
+
+.bcd-stack-row.bcd-row-inter .bcd-stack-val {
+  color: var(--oct);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.bcd-inter-dec {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-left: 6px;
+}
+
+.bcd-carry-pill {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  box-shadow: var(--neu-out-sm);
+}
+
+.bcd-carry-pill.is-one {
+  background: rgba(82, 191, 166, 0.18);
+  color: #1E8268;
+}
+
+.bcd-carry-pill.is-zero {
+  background: rgba(255, 107, 107, 0.16);
+  color: #D63333;
+}
+
+.bcd-carry-flag {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  box-shadow: var(--neu-out-sm);
+}
+
+.bcd-carry-flag.is-pos {
+  background: rgba(82, 191, 166, 0.18);
+  color: #1E8268;
+}
+
+.bcd-carry-flag.is-neg {
+  background: rgba(255, 107, 107, 0.16);
+  color: #D63333;
+}
+
+.bcd-deriv-note {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  background: var(--surface);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--neu-out-sm);
+}
+
+.bcd-deriv-note b {
+  color: var(--accent-primary);
+}
+
+/* Derivation Box */
+.bcd-deriv-box {
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  box-shadow: var(--neu-out-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bcd-deriv-title {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.bcd-deriv-step {
+  font-family: var(--mono);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.6;
+}
+
+.bcd-deriv-label {
+  display: inline-block;
+  min-width: 145px;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.bcd-deriv-step b {
+  color: var(--oct);
+}
+
+/* Final Result Card */
+.bcd-results-wrap {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.bcd-result-tile {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: 22px 20px;
+  box-shadow: var(--neu-in);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+}
+
+.bcd-result-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--text-muted);
+}
+
+.bcd-result-val {
+  font-family: var(--mono);
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--accent-primary);
+  word-break: break-all;
+}
+
+.bcd-result-val.is-neg {
+  color: #D63333;
+}
+
+.bcd-empty-msg {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--neu-in);
+}
+
 /* ---------- Footer ---------- */
 .page-footer {
   text-align: center;
@@ -1870,16 +2694,22 @@ button { cursor: pointer; outline: none; }
 .page-footer strong { color: var(--text-main); }
 
 /* ---------- Responsive ---------- */
-@media (max-width: 900px) {
-  .comp-answers-grid, .comp-solver-grid, .comp-operands-breakdown-grid { grid-template-columns: 1fr; }
-  .comp-operands-row { grid-template-columns: 1fr; gap: 16px; }
+@media (max-width: 980px) {
+  .comp-answers-grid, .comp-solver-grid, .comp-operands-breakdown-grid, .bcd-rep-grid, .bcd-results-wrap { grid-template-columns: 1fr; }
+  .comp-operands-row, .bcd-inputs-row { grid-template-columns: 1fr; gap: 16px; }
   .comp-tray-grid { grid-template-columns: 1fr; }
-  .comp-op-minus { margin: 0 auto; }
+  .comp-op-minus, .bcd-op-icon { margin: 0 auto; }
   .comp-step-result-grid { grid-template-columns: repeat(2, 1fr); }
   .comp-bitwidth-bar { flex-direction: column; align-items: center; }
 }
 
 @media (max-width: 640px) {
+  .tabs-nav { gap: 6px; padding: 4px 6px; }
+  .tab-btn { min-height: 42px; }
+  .tab-btn.is-active { padding: 4px 14px 4px 6px; }
+  .tab-icon { width: 32px; height: 32px; }
+  .tab-title { font-size: 13.5px; }
+  .bcd-deriv-label { min-width: 120px; font-size: 12px; }
   .readout-grid, .op-result-grid { grid-template-columns: repeat(2, 1fr); }
   .channel-head { flex-direction: column; align-items: flex-start; gap: 16px; }
   .title { font-size: 32px; text-align: left; }
@@ -1888,13 +2718,17 @@ button { cursor: pointer; outline: none; }
   
   .complement-panel, .op-panel { padding: 28px 20px; }
   .complement-head, .op-head { flex-direction: column; align-items: flex-start; gap: 20px; }
-  .comp-answer-card, .comp-solver-card { padding: 24px 16px; }
+  .comp-answer-card, .comp-solver-card, .bcd-box { padding: 24px 16px; }
   .comp-calc-btn { width: 100%; justify-content: center; }
   
   .expr-input { font-size: 18px; padding: 16px 44px 16px 16px; }
   .keypad-tray { justify-content: center; padding: 10px; }
   .keypad-divider { display: none; }
   .op-expression { font-size: 18px; padding: 24px 16px; }
+  
+  .bcd-multi-calc { font-size: 13.5px; padding: 16px 16px; }
+  .bcd-stack-label { min-width: 100px; font-size: 11px; }
+  .bcd-stack-val { font-size: 13.5px; }
 }
 
 /* ---------- Accessibility ---------- */
