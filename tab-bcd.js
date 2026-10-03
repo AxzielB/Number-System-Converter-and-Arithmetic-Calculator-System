@@ -1,15 +1,9 @@
-/**
- * tab-bcd.js - Tab 3: Binary-Coded Decimal (BCD) Arithmetic Engine
- * Implements decimal-to-BCD conversion, multi-digit columnar BCD addition
- * with automatic +0110₂ (+6) correction, and BCD subtraction via 9's and 10's complements.
- */
+// tab-bcd.js - Tab 3: Binary-Coded Decimal (BCD) Arithmetic Engine
 
 (function () {
   "use strict";
 
-  /* ==========================================================================
-     BCD ARITHMETIC ENGINE (ADDITION, 9'S & 10'S COMPLEMENT SUBTRACTION)
-     ========================================================================== */
+  // BCD ARITHMETIC ENGINE (ADDITION, 9'S & 10'S COMPLEMENT SUBTRACTION)
 
   var bcdState = {
     a: "",
